@@ -6,7 +6,7 @@ export default function User() {
   return (
     <div className="content">
         <main>
-            <Warning msg={'user is not found'}/>
+            <Warning msg={'کاربری ثبت نشده است!'}/>
         </main>
     </div>
   )

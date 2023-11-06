@@ -29,18 +29,18 @@ export default function Sidebar() {
                 <ul>
                     <li><Link to={'/'}  className="active">
                             <AiOutlineHome className='dashboard-icon' />
-                            <span>dashboard</span>
+                            <span>داشبورد</span>
                         </Link></li>
                     <li>
                         <Link to={'/products'}>
                         <MdOutlineProductionQuantityLimits className='dashboard-icon' />
-                            <span>products </span>
+                            <span>محصولات </span>
                         </Link>
                     </li>
                     <li>
                         <Link to={'users'}>
                         <FiUsers className='dashboard-icon' />
-                            <span>users</span>
+                            <span>کاربران</span>
                         </Link>
                     </li>
                 </ul>

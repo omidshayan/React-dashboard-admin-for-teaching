@@ -1,25 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import "./products.css";
 import { TbListDetails } from "react-icons/tb";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-
+import EditModal from "../editModal/EditModal";
 import Modal from "../modal/Modal";
+import DetailsModal from "./../detailsModal/DetailsModal";
 
 export default function ProductsList() {
 
+  // start details modal
+  const [isShowModalDetails, setIsShowModalDetails] = useState(false);
+  // end details modal
+
+  // start delete modal
   const [isShowModal, setIsShwoModal] = useState(false);
+  const confirmDeleteModal = () => {
+    console.log('deleted product')
+    setIsShwoModal(false);
+  };
+  // end delete modal
 
-  const cancelModal = () =>{
-    setIsShwoModal(false)
+  // start edit modal
+  const [isShowModalEdit, setIsShowModalEdit] = useState(false);
+  const onSubmitEditModal = () => {
+    console.log('editing product')
   }
+  // end edit modal
 
-  const confirmDeleteModal = () =>{
-    setIsShwoModal(false)
-  }
-  
   return (
     <>
-      {isShowModal && <Modal cancelModal={cancelModal} confirmDeleteModal={confirmDeleteModal}/> }
+      {isShowModalDetails && <DetailsModal closeModal={() => setIsShowModalDetails(false)} />}
+      {isShowModal && (
+        <Modal
+          cancelModal={() => setIsShwoModal(false)}
+          confirmDeleteModal={confirmDeleteModal}
+        />
+      )}
+
+      {isShowModalEdit && (
+        <EditModal 
+          closeModalEdit={() => setIsShowModalEdit(false)}
+          onSubmit={() => onSubmitEditModal()}
+        >
+          <div className="edit-input-modal">
+            <div className="input-lable">نام محصول</div>
+            <input type="text" className="edit-modal-input" />
+          </div>
+          <div className="edit-input-modal">
+            <div className="input-lable">قیمت محصول</div>
+            <input type="text" className="edit-modal-input" />
+          </div>
+          <div className="edit-input-modal">
+            <div className="input-lable">رنگ محصول</div>
+            <input type="text" className="edit-modal-input" />
+          </div>
+          <div className="edit-input-modal">
+            <div className="input-lable">تعداد محصول</div>
+            <input type="text" className="edit-modal-input" />
+          </div>
+        </EditModal>
+      )}
+
       <h1 className="product-list-title">لیستــــــ محصولاتــــــ</h1>
       <div className="table-wrapper">
         <table className="fl-table">
@@ -30,7 +71,6 @@ export default function ProductsList() {
               <th>قیمت </th>
               <th>تعداد</th>
               <th>تصویر</th>
-              <th>تاریخ</th>
               <th>عملیات</th>
             </tr>
           </thead>
@@ -38,8 +78,6 @@ export default function ProductsList() {
             <tr>
               <td>1</td>
               <td>book</td>
-              <td>230</td>
-              <td>12</td>
               <td>
                 <img
                   src="assets/img/profile.png"
@@ -47,13 +85,17 @@ export default function ProductsList() {
                   alt="dd"
                 />
               </td>
-              <td>1402/5/5</td>
+              <td>230</td>
+              <td>12</td>
               <td>
-                <div className="tooltip">
+                <div
+                  className="tooltip"
+                  onClick={() => setIsShowModalDetails(true)}
+                >
                   <TbListDetails className="product-list-icon-details" />
                   <span className="tooltiptext">جزئیات</span>
                 </div>
-                <div className="tooltip">
+                <div className="tooltip" onClick={() => setIsShowModalEdit(true)}>
                   <AiOutlineEdit className="product-list-icon-edit" />
                   <span className="tooltiptext">ویرایش</span>
                 </div>

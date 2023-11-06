@@ -1,0 +1,55 @@
+.modal-container{
+    width: 600px;
+    height: auto;
+    position: absolute;
+    background-color: rgba(26, 4, 26, 0.87);
+    margin: 0 auto;
+    z-index: 2;
+    border-radius: 20px;
+    visibility: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.header-modal{
+    display: flex;
+    padding: 20px;
+}
+.title-modal{
+    text-align: center;
+    margin: 0 auto;
+    font-size: 24px;
+}
+.elements-modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.icon-modal{
+    cursor: pointer;
+    font-size: 18px;
+}
+.icon-modal:hover{
+    color: red;
+}
+
+.detailsProduct{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+.details-img{
+    width: 230px;
+}
+.details-info{
+    display: flex;
+    flex-direction: column;
+}
+.detail-content{
+    margin-top: 20px;
+    font-size: 20px;
+}
+.active-modal{
+    visibility: visible;
+}
