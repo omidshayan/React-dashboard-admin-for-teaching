@@ -1,4 +1,4 @@
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import "./products.css";
 import { TbListDetails } from "react-icons/tb";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
@@ -23,9 +23,20 @@ export default function ProductsList() {
   // start edit modal
   const [isShowModalEdit, setIsShowModalEdit] = useState(false);
   const onSubmitEditModal = () => {
+    setIsShowModalEdit(false)
     console.log('editing product')
   }
   // end edit modal
+
+
+  // start get products in api
+  const [allProducts, setAllProducts ] = useState([]);
+  
+  useEffect(() =>{
+    fetch('http://localhost:3000/api/products').then(res => res.json()).then(products => setAllProducts(products));
+  },[])
+
+// end get products in api
 
   return (
     <>
@@ -75,36 +86,43 @@ export default function ProductsList() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>book</td>
-              <td>
-                <img
-                  src="assets/img/profile.png"
-                  className="product-list-img"
-                  alt="dd"
-                />
-              </td>
-              <td>230</td>
-              <td>12</td>
-              <td>
-                <div
-                  className="tooltip"
-                  onClick={() => setIsShowModalDetails(true)}
-                >
-                  <TbListDetails className="product-list-icon-details" />
-                  <span className="tooltiptext">جزئیات</span>
-                </div>
-                <div className="tooltip" onClick={() => setIsShowModalEdit(true)}>
-                  <AiOutlineEdit className="product-list-icon-edit" />
-                  <span className="tooltiptext">ویرایش</span>
-                </div>
-                <div className="tooltip" onClick={() => setIsShwoModal(true)}>
-                  <AiOutlineDelete className="product-list-icon-delete" />
-                  <span className="tooltiptext">حذف</span>
-                </div>
-              </td>
-            </tr>
+            {
+              allProducts.map((product, index) => {
+                return(
+                  <tr key={product.id}>
+                  <td>{index + 1}</td>
+                  <td>{product.title}</td>
+                  <td>
+                    <img
+                      src={product.img}
+                      className="product-list-img"
+                      alt="dd"
+                    />
+                  </td>
+                  <td>{product.price}</td>
+                  <td>{product.count}</td>
+                  <td>
+                    <div
+                      className="tooltip"
+                      onClick={() => setIsShowModalDetails(true)}
+                    >
+                      <TbListDetails className="product-list-icon-details" />
+                      <span className="tooltiptext">جزئیات</span>
+                    </div>
+                    <div className="tooltip" onClick={() => setIsShowModalEdit(true)}>
+                      <AiOutlineEdit className="product-list-icon-edit" />
+                      <span className="tooltiptext">ویرایش</span>
+                    </div>
+                    <div className="tooltip" onClick={() => setIsShwoModal(true)}>
+                      <AiOutlineDelete className="product-list-icon-delete" />
+                      <span className="tooltiptext">حذف</span>
+                    </div>
+                  </td>
+                </tr>
+                )
+              } )
+            }
+     
           </tbody>
         </table>
       </div>
