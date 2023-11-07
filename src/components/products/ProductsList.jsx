@@ -5,42 +5,52 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import EditModal from "../editModal/EditModal";
 import Modal from "../modal/Modal";
 import DetailsModal from "./../detailsModal/DetailsModal";
+import Warning from "./../../components/warnings/Warning";
 
 export default function ProductsList() {
-
   // start details modal
   const [isShowModalDetails, setIsShowModalDetails] = useState(false);
   // end details modal
 
   // start delete modal
   const [isShowModal, setIsShwoModal] = useState(false);
+  const [productId, setProductId] = useState(null);
+
   const confirmDeleteModal = () => {
-    console.log('deleted product')
-    setIsShwoModal(false);
+    fetch(`http://localhost:3000/api/products/${productId}`,{
+      method: "DELETE"}).then(res => res.json()).then(result => {
+        setIsShwoModal(false);
+        getProducts();
+      })
   };
   // end delete modal
 
   // start edit modal
   const [isShowModalEdit, setIsShowModalEdit] = useState(false);
   const onSubmitEditModal = () => {
-    setIsShowModalEdit(false)
-    console.log('editing product')
-  }
+    setIsShowModalEdit(false);
+    console.log("editing product");
+  };
   // end edit modal
 
-
   // start get products in api
-  const [allProducts, setAllProducts ] = useState([]);
-  
-  useEffect(() =>{
-    fetch('http://localhost:3000/api/products').then(res => res.json()).then(products => setAllProducts(products));
-  },[])
+  const [allProducts, setAllProducts] = useState([]);
 
-// end get products in api
+  useEffect(() => {
+    getProducts()
+  }, []);
+  const getProducts = () =>{
+    fetch("http://localhost:3000/api/products")
+      .then((res) => res.json())
+      .then((products) => setAllProducts(products));
+  }
+  // end get products in api
 
   return (
     <>
-      {isShowModalDetails && <DetailsModal closeModal={() => setIsShowModalDetails(false)} />}
+      {isShowModalDetails && (
+        <DetailsModal closeModal={() => setIsShowModalDetails(false)} />
+      )}
       {isShowModal && (
         <Modal
           cancelModal={() => setIsShwoModal(false)}
@@ -49,7 +59,7 @@ export default function ProductsList() {
       )}
 
       {isShowModalEdit && (
-        <EditModal 
+        <EditModal
           closeModalEdit={() => setIsShowModalEdit(false)}
           onSubmit={() => onSubmitEditModal()}
         >
@@ -86,10 +96,9 @@ export default function ProductsList() {
             </tr>
           </thead>
           <tbody>
-            {
-              allProducts.map((product, index) => {
-                return(
-                  <tr key={product.id}>
+            {allProducts.map((product, index) => {
+              return (
+                <tr key={product.id}>
                   <td>{index + 1}</td>
                   <td>{product.title}</td>
                   <td>
@@ -109,23 +118,32 @@ export default function ProductsList() {
                       <TbListDetails className="product-list-icon-details" />
                       <span className="tooltiptext">جزئیات</span>
                     </div>
-                    <div className="tooltip" onClick={() => setIsShowModalEdit(true)}>
+                    <div
+                      className="tooltip"
+                      onClick={() => setIsShowModalEdit(true)}
+                    >
                       <AiOutlineEdit className="product-list-icon-edit" />
                       <span className="tooltiptext">ویرایش</span>
                     </div>
-                    <div className="tooltip" onClick={() => setIsShwoModal(true)}>
+
+                    <div
+                      className="tooltip"
+                      onClick={() => {
+                        setIsShwoModal(true)
+                        setProductId(product.id)
+                      }}
+                    >
                       <AiOutlineDelete className="product-list-icon-delete" />
                       <span className="tooltiptext">حذف</span>
                     </div>
                   </td>
                 </tr>
-                )
-              } )
-            }
-     
+              );
+            })}
           </tbody>
         </table>
       </div>
+      {!allProducts.length && <Warning msg={"محصولی یافت نشد"} />}
     </>
   );
 }
