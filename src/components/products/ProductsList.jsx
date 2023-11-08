@@ -10,6 +10,7 @@ import Warning from "./../../components/warnings/Warning";
 export default function ProductsList() {
   // start details modal
   const [isShowModalDetails, setIsShowModalDetails] = useState(false);
+  const [oneProduct, setOneProduct] = useState({});
   // end details modal
 
   // start delete modal
@@ -17,19 +18,47 @@ export default function ProductsList() {
   const [productId, setProductId] = useState(null);
 
   const confirmDeleteModal = () => {
-    fetch(`http://localhost:3000/api/products/${productId}`,{
-      method: "DELETE"}).then(res => res.json()).then(result => {
+    fetch(`http://localhost:3000/api/products/${productId}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((result) => {
         setIsShwoModal(false);
         getProducts();
-      })
+      });
   };
   // end delete modal
 
   // start edit modal
   const [isShowModalEdit, setIsShowModalEdit] = useState(false);
+  const [nameTitle, setNameTitle] = useState("");
+  const [price, setPrice] = useState("");
+  const [count, setCount] = useState("");
+  const [img, setImg] = useState("");
   const onSubmitEditModal = () => {
+    console.log("submit edit component");
     setIsShowModalEdit(false);
-    console.log("editing product");
+
+    const productUpdate = {
+      title: nameTitle,
+      price: price,
+      count: count,
+      img: img,
+    };
+
+    fetch(`http://localhost:3000/api/products/${productId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "aplication/json",
+      },
+      body: JSON.stringify(productUpdate),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        getProducts();
+        setIsShowModalEdit(false);
+      });
   };
   // end edit modal
 
@@ -37,19 +66,23 @@ export default function ProductsList() {
   const [allProducts, setAllProducts] = useState([]);
 
   useEffect(() => {
-    getProducts()
+    getProducts();
   }, []);
-  const getProducts = () =>{
+
+  const getProducts = () => {
     fetch("http://localhost:3000/api/products")
       .then((res) => res.json())
       .then((products) => setAllProducts(products));
-  }
+  };
   // end get products in api
 
   return (
     <>
       {isShowModalDetails && (
-        <DetailsModal closeModal={() => setIsShowModalDetails(false)} />
+        <DetailsModal
+          closeModal={() => setIsShowModalDetails(false)}
+          oneProduct={oneProduct}
+        />
       )}
       {isShowModal && (
         <Modal
@@ -61,23 +94,45 @@ export default function ProductsList() {
       {isShowModalEdit && (
         <EditModal
           closeModalEdit={() => setIsShowModalEdit(false)}
-          onSubmit={() => onSubmitEditModal()}
+          onSubmit={() => {
+            onSubmitEditModal();
+          }}
         >
           <div className="edit-input-modal">
             <div className="input-lable">نام محصول</div>
-            <input type="text" className="edit-modal-input" />
+            <input
+              type="text"
+              className="edit-modal-input"
+              value={nameTitle}
+              onChange={(event) => setNameTitle(event.target.value)}
+            />
           </div>
           <div className="edit-input-modal">
             <div className="input-lable">قیمت محصول</div>
-            <input type="text" className="edit-modal-input" />
-          </div>
-          <div className="edit-input-modal">
-            <div className="input-lable">رنگ محصول</div>
-            <input type="text" className="edit-modal-input" />
+            <input
+              type="text"
+              className="edit-modal-input"
+              value={price}
+              onChange={(event) => setPrice(event.target.value)}
+            />
           </div>
           <div className="edit-input-modal">
             <div className="input-lable">تعداد محصول</div>
-            <input type="text" className="edit-modal-input" />
+            <input
+              type="text"
+              className="edit-modal-input"
+              value={count}
+              onChange={(event) => setCount(event.target.value)}
+            />
+          </div>
+          <div className="edit-input-modal">
+            <div className="input-lable">آدرس عکس </div>
+            <input
+              type="text"
+              className="edit-modal-input"
+              value={img}
+              onChange={(event) => setImg(event.target.value)}
+            />
           </div>
         </EditModal>
       )}
@@ -113,14 +168,23 @@ export default function ProductsList() {
                   <td>
                     <div
                       className="tooltip"
-                      onClick={() => setIsShowModalDetails(true)}
+                      onClick={() => {
+                        setIsShowModalDetails(true);
+                        setOneProduct(product);
+                      }}
                     >
                       <TbListDetails className="product-list-icon-details" />
                       <span className="tooltiptext">جزئیات</span>
                     </div>
                     <div
                       className="tooltip"
-                      onClick={() => setIsShowModalEdit(true)}
+                      onClick={() => {
+                        setIsShowModalEdit(true);
+                        setNameTitle(product.title);
+                        setPrice(product.price);
+                        setCount(product.count);
+                        setImg(product.img);
+                      }}
                     >
                       <AiOutlineEdit className="product-list-icon-edit" />
                       <span className="tooltiptext">ویرایش</span>
@@ -129,8 +193,8 @@ export default function ProductsList() {
                     <div
                       className="tooltip"
                       onClick={() => {
-                        setIsShwoModal(true)
-                        setProductId(product.id)
+                        setIsShwoModal(true);
+                        setProductId(product.id);
                       }}
                     >
                       <AiOutlineDelete className="product-list-icon-delete" />

@@ -2,7 +2,7 @@ import React from "react";
 import "./EditModal.css";
 import { AiOutlineClose } from "react-icons/ai";
 
-export default function EditModal({children, closeModalEdit, onSubmit}) {
+export default function EditModal({ children, closeModalEdit, onSubmit }) {
   return (
     <>
       <div className="modal-container active-modal">
@@ -13,16 +13,16 @@ export default function EditModal({children, closeModalEdit, onSubmit}) {
           <div className="title-modal">ویرایش محصول: نام محصول</div>
         </div>
         <hr />
-        <form>
-
-            {children}
-
-        </form>
+        <form>{children}</form>
         <div className="elements-modal">
           <button href="" className="link-modal" onClick={() => onSubmit()}>
-              ویرایش
+            ویرایش
           </button>
-          <button href="" className="link-modal" onClick={() => closeModalEdit()}>
+          <button
+            href=""
+            className="link-modal"
+            onClick={() => closeModalEdit()}
+          >
             بستن
           </button>
         </div>
