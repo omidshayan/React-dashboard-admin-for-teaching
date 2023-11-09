@@ -6,8 +6,9 @@ import EditModal from "../editModal/EditModal";
 import Modal from "../modal/Modal";
 import DetailsModal from "./../detailsModal/DetailsModal";
 import Warning from "./../../components/warnings/Warning";
+import axios from 'axios';
 
-export default function ProductsList() {
+export default function ProductsList({allProducts, getProducts}) {
   // start details modal
   const [isShowModalDetails, setIsShowModalDetails] = useState(false);
   const [oneProduct, setOneProduct] = useState({});
@@ -17,16 +18,28 @@ export default function ProductsList() {
   const [isShowModal, setIsShwoModal] = useState(false);
   const [productId, setProductId] = useState(null);
 
-  const confirmDeleteModal = () => {
-    fetch(`http://localhost:3000/api/products/${productId}`, {
-      method: "DELETE",
+
+  const confirmDeleteModal = () =>{
+    axios.delete(`http://localhost:3000/api/products/${productId}`)
+    .then(response => {
+      console.log(`Deleted post with ID ${productId}`);
+      setIsShwoModal(false);
+      getProducts();
     })
-      .then((res) => res.json())
-      .then((result) => {
-        setIsShwoModal(false);
-        getProducts();
-      });
-  };
+  }
+
+  // const confirmDeleteModal = () => {
+  //   fetch(`http://localhost:3000/api/products/${productId}`, {
+  //     method: "DELETE",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((result) => {
+  //       setIsShwoModal(false);
+  //       getProducts();
+  //     });
+  // };
+
+
   // end delete modal
 
   // start edit modal
@@ -35,6 +48,8 @@ export default function ProductsList() {
   const [price, setPrice] = useState("");
   const [count, setCount] = useState("");
   const [img, setImg] = useState("");
+
+
   const onSubmitEditModal = () => {
     console.log("submit edit component");
     setIsShowModalEdit(false);
@@ -46,34 +61,30 @@ export default function ProductsList() {
       img: img,
     };
 
-    fetch(`http://localhost:3000/api/products/${productId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "aplication/json",
-      },
-      body: JSON.stringify(productUpdate),
+    axios.put(`http://localhost:3000/api/products/${productId}`)
+    .then((responce) => {
+      getProducts();
+      setIsShowModalEdit(false);
     })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result);
-        getProducts();
-        setIsShowModalEdit(false);
-      });
+
+    // fetch(`http://localhost:3000/api/products/${productId}`, {
+    //   method: "PUT",
+    //   headers: {
+    //     "Content-Type": "aplication/json",
+    //   },
+    //   body: JSON.stringify(productUpdate),
+    // })
+    //   .then((res) => res.json())
+    //   .then((result) => {
+    //     console.log(result);
+    //     getProducts();
+    //     setIsShowModalEdit(false);
+    //   });
   };
   // end edit modal
 
   // start get products in api
-  const [allProducts, setAllProducts] = useState([]);
 
-  useEffect(() => {
-    getProducts();
-  }, []);
-
-  const getProducts = () => {
-    fetch("http://localhost:3000/api/products")
-      .then((res) => res.json())
-      .then((products) => setAllProducts(products));
-  };
   // end get products in api
 
   return (
