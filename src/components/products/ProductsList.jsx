@@ -28,18 +28,6 @@ export default function ProductsList({allProducts, getProducts}) {
     })
   }
 
-  // const confirmDeleteModal = () => {
-  //   fetch(`http://localhost:3000/api/products/${productId}`, {
-  //     method: "DELETE",
-  //   })
-  //     .then((res) => res.json())
-  //     .then((result) => {
-  //       setIsShwoModal(false);
-  //       getProducts();
-  //     });
-  // };
-
-
   // end delete modal
 
   // start edit modal
@@ -67,25 +55,11 @@ export default function ProductsList({allProducts, getProducts}) {
       setIsShowModalEdit(false);
     })
 
-    // fetch(`http://localhost:3000/api/products/${productId}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     "Content-Type": "aplication/json",
-    //   },
-    //   body: JSON.stringify(productUpdate),
-    // })
-    //   .then((res) => res.json())
-    //   .then((result) => {
-    //     console.log(result);
-    //     getProducts();
-    //     setIsShowModalEdit(false);
-    //   });
   };
   // end edit modal
 
   // start get products in api
 
-  // end get products in api
 
   return (
     <>

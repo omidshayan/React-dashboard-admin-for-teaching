@@ -19,13 +19,6 @@ export default function Products() {
       setAllProducts(responce.data)
     })
   }
-  // const getProducts = () => {
-  //   fetch("http://localhost:3000/api/products")
-  //     .then((res) => res.json())
-  //     .then((products) => setAllProducts(products));
-  // };
-
-
   return (
     <div className="content">
       <main>
